@@ -356,6 +356,7 @@ async function main(): Promise<void> {
 
     // Claude finished responding → idle / "Done" state
     case "Stop": {
+      const _e = event as StopInput;
       if (!isOverlayAlive()) break;
       sendToOverlay(buildShowCmds("cc.stop"));
       break;
@@ -363,6 +364,7 @@ async function main(): Promise<void> {
 
     // Turn ended due to API error → show error state
     case "StopFailure": {
+      const _e = event as StopFailureInput;
       if (!isOverlayAlive()) break;
       sendToOverlay(buildShowCmds("cc.stop.failure"));
       break;
