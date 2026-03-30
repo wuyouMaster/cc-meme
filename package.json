@@ -3,20 +3,21 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Claude Code hook: floating meme overlay for task progress",
-  "main": "./dist/cc-meme.js",
+  "main": "./bin/cc-meme.js",
   "exports": {
-    ".": "./dist/cc-meme.js"
+    ".": "./bin/cc-meme.js"
   },
   "bin": {
-    "cc-meme": "./dist/cc-meme.js"
+    "cc-meme": "./bin/cc-meme.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/wuyouMaster/cc-meme"
   },
   "files": [
-    "dist",
-    "hooks.json",
+    "bin",
+    ".claude-plugin",
+    "hooks",
     "README.md"
   ],
   "scripts": {

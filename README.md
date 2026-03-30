@@ -57,16 +57,34 @@ cc-meme 是 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 Ho
 | 依赖 | 版本 | 说明 |
 |------|------|------|
 | [Node.js](https://nodejs.org/) | 18+ | 运行 Hook 脚本 |
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | latest | AI 编码助手 |
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | 1.0.33+ | AI 编码助手 |
 | [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) | 0.1+ | 浮动动画桌面应用 |
 
-### 方式一：从 npm 安装
+### 方式一：作为 Claude Code 插件安装（推荐）
+
+```bash
+# 克隆插件仓库
+git clone https://github.com/wuyouMaster/cc-meme.git
+
+# 构建
+cd cc-meme
+npm install && npm run build
+
+# 加载插件（开发/测试）
+claude --plugin-dir ./cc-meme
+```
+
+也可以将插件目录添加到 Claude Code 的插件市场中统一管理。详见 [Claude Code 插件文档](https://code.claude.com/docs/en/plugins)。
+
+### 方式二：从 npm 安装（手动配置 Hooks）
 
 ```bash
 npm install -g cc-meme
 ```
 
-### 方式二：从源码安装
+安装后，编辑 `~/.claude/settings.json`，添加 Hook 配置（参考 `hooks/hooks.json`）。
+
+### 方式三：从源码安装
 
 ```bash
 git clone https://github.com/wuyouMaster/cc-meme.git
@@ -83,62 +101,19 @@ npm run build
 
 请参考 [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) 仓库完成桌面应用的安装。
 
-### 2. 配置 Claude Code Hooks
+### 2. 加载插件
 
-编辑 `~/.claude/settings.json`，添加 Hook 配置：
+**使用 Claude Code 插件系统（推荐）：**
 
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ]
-  }
-}
+```bash
+claude --plugin-dir /path/to/cc-meme
 ```
 
-也可以直接复制项目中的 `hooks.json` 作为参考模板。
+插件会自动注册 `hooks/hooks.json` 中定义的所有 Hook 事件，无需手动编辑 `settings.json`。
+
+**手动配置（备选）：**
+
+将 `hooks/hooks.json` 中的 `hooks` 字段内容合并到 `~/.claude/settings.json`。
 
 ### 3. 启动 Claude Code
 
@@ -201,9 +176,14 @@ node dist/cc-meme.js
 ### 项目结构
 
 ```
-cc-plugin/
-├── cc-meme.ts          # Hook 入口脚本
-├── hooks.json          # Claude Code Hook 配置模板
+cc-meme/
+├── .claude-plugin/
+│   └── plugin.json     # Claude Code 插件清单
+├── hooks/
+│   └── hooks.json      # Hook 事件配置
+├── bin/                # 编译输出（构建后生成）
+│   └── cc-meme.js
+├── cc-meme.ts          # Hook 入口脚本源码
 ├── package.json
 └── tsconfig.json
 ```

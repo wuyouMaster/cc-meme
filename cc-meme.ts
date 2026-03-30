@@ -291,6 +291,10 @@ interface NotificationInput extends CommonInput {
   notification_type: "permission_prompt" | "idle_prompt" | "auth_success" | "elicitation_dialog";
 }
 
+interface SessionEndInput extends CommonInput {
+  reason: "clear" | "resume" | "logout" | "prompt_input_exit" | "bypass_permissions_disabled" | "other";
+}
+
 async function readStdin(): Promise<CommonInput> {
   const chunks: Buffer[] = [];
   for await (const chunk of process.stdin) chunks.push(chunk);
@@ -379,6 +383,15 @@ async function main(): Promise<void> {
       } else if (e.notification_type === "permission_prompt") {
         sendToOverlay(buildShowCmds("cc.notification", "Permission needed"));
       }
+      break;
+    }
+
+    // Session is ending (e.g. /exit, /clear, logout) → kill overlay
+    case "SessionEnd": {
+      const e = event as SessionEndInput;
+      // On /clear or /resume the session restarts immediately — keep overlay alive
+      if (e.reason === "clear" || e.reason === "resume") break;
+      killOverlay();
       break;
     }
   }
