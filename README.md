@@ -50,7 +50,40 @@ cc-meme 是 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 Ho
 
 ---
 
-## 📦 安装
+## 🚀 使用
+
+### 1. 安装 meme-overlay
+
+请参考 [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) 仓库完成桌面应用的安装和动画配置。
+
+### 2. 修改配置
+
+**使用 Claude Code 插件系统（推荐）：**
+
+```bash
+vim ~/.claude/settings.json
+# 增加如下配置
+{
+    "extraKnownMarketplaces": {
+        "cc-meme": {
+            "source": {
+                "source": "git",
+                "url": "https://github.com/wuyouMaster/cc-meme.git"
+            }
+        }
+    },
+    "enabledPlugins": {
+        "cc-meme@cc-meme": true
+    }
+}
+```
+启动claude code， 启动之后输入/plugin 即可进入如下页面, 选择cc-meme， 回车即可见到cc-meme  plugin, 选择安装之后退出重启claude code即可
+![marketplaces](./cc-marketplacs.png)
+
+
+插件会自动注册 `hooks/hooks.json` 中定义的所有 Hook 事件，无需手动编辑 `settings.json`。
+
+---
 
 ### 前置条件
 
@@ -60,66 +93,6 @@ cc-meme 是 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 的 Ho
 | [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | 1.0.33+ | AI 编码助手 |
 | [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) | 0.1+ | 浮动动画桌面应用 |
 
-### 方式一：作为 Claude Code 插件安装（推荐）
-
-```bash
-# 克隆插件仓库
-git clone https://github.com/wuyouMaster/cc-meme.git
-
-# 构建
-cd cc-meme
-npm install && npm run build
-
-# 加载插件（开发/测试）
-claude --plugin-dir ./cc-meme
-```
-
-也可以将插件目录添加到 Claude Code 的插件市场中统一管理。详见 [Claude Code 插件文档](https://code.claude.com/docs/en/plugins)。
-
-### 方式二：从 npm 安装（手动配置 Hooks）
-
-```bash
-npm install -g cc-meme
-```
-
-安装后，编辑 `~/.claude/settings.json`，添加 Hook 配置（参考 `hooks/hooks.json`）。
-
-### 方式三：从源码安装
-
-```bash
-git clone https://github.com/wuyouMaster/cc-meme.git
-cd cc-meme
-npm install
-npm run build
-```
-
----
-
-## 🚀 使用
-
-### 1. 安装 meme-overlay
-
-请参考 [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) 仓库完成桌面应用的安装。
-
-### 2. 加载插件
-
-**使用 Claude Code 插件系统（推荐）：**
-
-```bash
-claude --plugin-dir /path/to/cc-meme
-```
-
-插件会自动注册 `hooks/hooks.json` 中定义的所有 Hook 事件，无需手动编辑 `settings.json`。
-
-**手动配置（备选）：**
-
-将 `hooks/hooks.json` 中的 `hooks` 字段内容合并到 `~/.claude/settings.json`。
-
-### 3. 启动 Claude Code
-
-配置完成后，正常启动 Claude Code 即可。动画覆盖层会在任务执行时自动出现。
-
----
 
 ## ⚙️ 配置
 

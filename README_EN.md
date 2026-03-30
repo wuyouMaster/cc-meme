@@ -50,100 +50,47 @@ It listens to Claude Code events (session start, tool calls, errors, etc.) and c
 
 ---
 
-## 📦 Installation
-
-### Prerequisites
-
-| Dependency | Version | Description |
-|-----------|---------|-------------|
-| [Node.js](https://nodejs.org/) | 18+ | Runs the hook script |
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | latest | AI coding assistant |
-| [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) | 0.1+ | Floating animation desktop app |
-
-### Option 1: Install from npm
-
-```bash
-npm install -g cc-meme
-```
-
-### Option 2: Install from source
-
-```bash
-git clone https://github.com/wuyouMaster/cc-meme.git
-cd cc-meme
-npm install
-npm run build
-```
-
----
-
 ## 🚀 Usage
 
 ### 1. Install meme-overlay
 
-Please refer to the [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) repository to install the desktop application.
+Please refer to the [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) repository to install the desktop application and configure animations.
 
-### 2. Configure Claude Code Hooks
+### 2. Configure
 
-Edit `~/.claude/settings.json` and add the hook configuration:
+**Using Claude Code Plugin System (recommended):**
 
-```json
+```bash
+vim ~/.claude/settings.json
+# Add the following configuration
 {
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node /path/to/cc-meme/dist/cc-meme.js",
-            "async": true
-          }
-        ]
-      }
-    ]
-  }
+    "extraKnownMarketplaces": {
+        "cc-meme": {
+            "source": {
+                "source": "git",
+                "url": "https://github.com/wuyouMaster/cc-meme.git"
+            }
+        }
+    },
+    "enabledPlugins": {
+        "cc-meme@cc-meme": true
+    }
 }
 ```
 
-You can also copy the `hooks.json` from the project as a reference template.
+Start Claude Code, then type `/plugin` to enter the following page. Select cc-meme, press Enter to see the cc-meme plugin. After installation, exit and restart Claude Code.
 
-### 3. Start Claude Code
+![marketplaces](./cc-marketplacs.png)
 
-Once configured, just start Claude Code normally. The animation overlay will appear automatically during task execution.
+The plugin will automatically register all Hook events defined in `hooks/hooks.json`, no need to manually edit `settings.json`.
 
+### Prerequisites
+
+| Dependency | Version | Description |
+|------------|---------|-------------|
+| [Node.js](https://nodejs.org/) | 18+ | Runs the hook script |
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | 1.0.33+ | AI coding assistant |
+| [meme-overlay](https://github.com/wuyouMaster/opencode-overlay) | 0.1+ | Floating animation desktop app |
 ---
 
 ## ⚙️ Configuration
@@ -201,9 +148,14 @@ node dist/cc-meme.js
 ### Project Structure
 
 ```
-cc-plugin/
-├── cc-meme.ts          # Hook entry script
-├── hooks.json          # Claude Code Hook config template
+cc-meme/
+├── .claude-plugin/
+│   └── plugin.json     # Claude Code plugin manifest
+├── hooks/
+│   └── hooks.json      # Hook event configuration
+├── bin/                # Build output (generated after build)
+│   └── cc-meme.js
+├── cc-meme.ts          # Hook entry script source
 ├── package.json
 └── tsconfig.json
 ```
