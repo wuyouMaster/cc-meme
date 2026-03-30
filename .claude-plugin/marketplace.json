@@ -1,0 +1,23 @@
+{
+  "name": "cc-meme",
+  "owner": {
+    "name": "wuyouMaster"
+  },
+  "metadata": {
+    "description": "Floating meme animation overlay for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "cc-meme",
+      "source": "./",
+      "description": "Floating meme animation overlay for Claude Code task progress. Shows fun animations during coding sessions via a persistent overlay window.",
+      "version": "0.1.0",
+      "author": {
+        "name": "wuyouMaster"
+      },
+      "homepage": "https://github.com/wuyouMaster/cc-meme",
+      "repository": "https://github.com/wuyouMaster/cc-meme",
+      "license": "MIT"
+    }
+  ]
+}
